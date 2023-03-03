@@ -11,11 +11,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.oktodemo.model.AppointmentEntity;
-import com.example.oktodemo.model.DoctorEntity;
-import com.example.oktodemo.model.PatientEntity;
-import com.example.oktodemo.model.TimeSlotEntity;
-import com.example.oktodemo.model.WorkingDayEntity;
+import com.example.oktodemo.model.entity.AppointmentEntity;
+import com.example.oktodemo.model.entity.DoctorEntity;
+import com.example.oktodemo.model.entity.PatientEntity;
+import com.example.oktodemo.model.entity.TimeSlotEntity;
+import com.example.oktodemo.model.entity.WorkingDayEntity;
 import com.example.oktodemo.repository.AppointmentEntityRepository;
 import com.example.oktodemo.repository.DoctorEntityRepository;
 import com.example.oktodemo.repository.PatientEntityRepository;
