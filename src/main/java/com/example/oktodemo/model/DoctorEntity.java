@@ -1,0 +1,35 @@
+package com.example.oktodemo.model;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name="doctor")
+public class DoctorEntity {
+
+  @Id
+  @GeneratedValue
+  private Long id;
+
+  private String firstName;
+
+  private String lastName;
+
+  @OneToMany(mappedBy = "doctorEntity", fetch = FetchType.EAGER)
+  private Set<WorkingDayEntity> workingDayEntities = new HashSet<>();
+
+  @OneToMany(mappedBy = "doctorEntity", fetch = FetchType.EAGER)
+  private Set<AppointmentEntity> appointmentEntities = new HashSet<>();
+}
