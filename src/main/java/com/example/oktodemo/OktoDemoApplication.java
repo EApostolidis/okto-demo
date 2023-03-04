@@ -5,6 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.oktodemo.model.dto.AppointmentDto;
+import com.example.oktodemo.model.dto.DoctorDto;
 import com.example.oktodemo.service.AppointmentService;
 import com.example.oktodemo.service.DoctorService;
 
@@ -30,7 +32,8 @@ public class OktoDemoApplication implements CommandLineRunner {
     log.info("run process");
 
     var result = appointmentService.fetchAppointments();
-    var workingdays = doctorService.fetchDoctorWorkingDaysByDoctorFirstNameAndLastName("Vaggelis", "Apostolidis");
+    AppointmentDto appointmentDto = AppointmentDto.builder().doctor(DoctorDto.builder().firstName("Vaggelis").lastName("Apostolidis").build()).build();
+    var workingdays = appointmentService.createAppointment(appointmentDto);
     log.info("{end of process {}", result);
 
   }
