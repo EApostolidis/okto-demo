@@ -1,20 +1,26 @@
 package com.example.oktodemo.model.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AppointmentDto {
 
   private LocalDate date;
 
-  private LocalDateTime from;
+  private LocalTime from;
 
-  private LocalDateTime to;
+  private LocalTime  to;
+
+  private DoctorDto doctor;
+
+  private PatientDto patient;
 }

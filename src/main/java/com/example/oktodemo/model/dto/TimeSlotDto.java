@@ -1,6 +1,6 @@
 package com.example.oktodemo.model.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TimeSlotDto {
 
-  private LocalDateTime from;
+  private LocalTime from;
 
-  private LocalDateTime to;
+  private LocalTime to;
 }
