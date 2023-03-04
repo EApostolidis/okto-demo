@@ -27,6 +27,7 @@ public class AppointmentService {
     this.doctorEntityRepository = doctorEntityRepository;
   }
 
+  
   public AppointmentDto createAppointment(AppointmentDto appointmentDto) {
     Optional<AppointmentEntity> appointment = appointmentEntityRepository
         .findAppointmentEntityByDoctorEntity_FirstNameAndDoctorEntity_LastName(appointmentDto.getDoctor().getFirstName(),
