@@ -18,26 +18,29 @@ import com.example.oktodemo.model.entity.DoctorEntity;
 import com.example.oktodemo.model.entity.PatientEntity;
 import com.example.oktodemo.model.entity.TimeSlotEntity;
 import com.example.oktodemo.repository.AppointmentEntityRepository;
-import com.example.oktodemo.repository.DoctorEntityRepository;
 
 @Service
 public class AppointmentService {
 
   private final AppointmentEntityRepository appointmentEntityRepository;
-  private final DoctorEntityRepository doctorEntityRepository;
+  private final DoctorService doctorService;
 
-  public AppointmentService(AppointmentEntityRepository appointmentEntityRepository, DoctorEntityRepository doctorEntityRepository) {
+  private final PatientService patientService;
+
+  public AppointmentService(AppointmentEntityRepository appointmentEntityRepository, DoctorService doctorService, PatientService patientService) {
     this.appointmentEntityRepository = appointmentEntityRepository;
-    this.doctorEntityRepository = doctorEntityRepository;
+    this.doctorService = doctorService;
+    this.patientService = patientService;
   }
 
   public AppointmentDto createAppointment(AppointmentDto appointmentDto) {
-    Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findDoctorEntityByFirstNameAndLastName(appointmentDto.getDoctor().getFirstName(),
+    DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(appointmentDto.getDoctor().getFirstName(),
         appointmentDto.getDoctor().getLastName());
-    if (doctorEntity.isEmpty()) {
-      throw new RuntimeException("There is no doctor with the provided name");
-    }
-    Optional<AppointmentEntity> bookedAppointment = doctorEntity.get().getAppointmentEntities().stream()
+
+    PatientEntity patientEntity = patientService.fetchPatientByFirstNameAndLastName(appointmentDto.getPatient().getFirstName(),
+        appointmentDto.getPatient().getLastName());
+
+    Optional<AppointmentEntity> bookedAppointment = doctorEntity.getAppointmentEntities().stream()
         .filter(appointment -> appointment.getDate().equals(appointmentDto.getDate()) &&
             (checkIfTimeIsInsidePeriod(createLocalDateTime(appointmentDto.getDate(), appointmentDto.getFrom()), appointment.getFrom(),
                 appointment.getTo()) ||
@@ -49,7 +52,7 @@ public class AppointmentService {
       throw new RuntimeException("There is already booked appointment at that day and hour");
     }
 
-    Optional<Optional<TimeSlotEntity>> timeSlotEntity = Optional.of(doctorEntity.get().getWorkingDayEntities().stream()
+    Optional<Optional<TimeSlotEntity>> timeSlotEntity = Optional.of(doctorEntity.getWorkingDayEntities().stream()
         .filter(workingDayEntity -> workingDayEntity.getDate().equals(appointmentDto.getDate()))
         .findFirst()
         .map(workingDayEntity -> workingDayEntity.getTimeSlotEntityList().stream()
@@ -63,18 +66,15 @@ public class AppointmentService {
       throw new RuntimeException("There is no available time for appointment");
     }
 
-    AppointmentEntity appointmentEntity = createAppointmentEntity(appointmentDto, doctorEntity);
+    AppointmentEntity appointmentEntity = createAppointmentEntity(appointmentDto, doctorEntity, patientEntity);
 
     appointmentEntityRepository.save(appointmentEntity);
     return appointmentDto;
   }
 
-  private AppointmentEntity createAppointmentEntity(AppointmentDto appointmentDto, Optional<DoctorEntity> doctorEntity) {
+  private AppointmentEntity createAppointmentEntity(AppointmentDto appointmentDto, DoctorEntity doctorEntity, PatientEntity patientEntity) {
     AppointmentEntity appointmentEntity = new AppointmentEntity();
-    PatientEntity patientEntity = new PatientEntity();
-    patientEntity.setFirstName(appointmentDto.getPatient().getFirstName());
-    patientEntity.setFirstName(appointmentDto.getPatient().getLastName());
-    appointmentEntity.setDoctorEntity(doctorEntity.get());
+    appointmentEntity.setDoctorEntity(doctorEntity);
     appointmentEntity.setPatientEntity(patientEntity);
     appointmentEntity.setDate(appointmentDto.getDate());
     appointmentEntity.setFrom(createLocalDateTime(appointmentDto.getDate(), appointmentDto.getFrom()));
@@ -114,6 +114,6 @@ public class AppointmentService {
   }
 
   private boolean checkIfTimeIsInsidePeriod(LocalDateTime check, LocalDateTime from, LocalDateTime to) {
-    return check.isAfter(from) && check.isBefore(to);
+    return (check.equals(from) || check.isAfter(from)) && (check.isBefore(to) || check.equals(to));
   }
 }

@@ -12,6 +12,7 @@ import com.example.oktodemo.model.dto.TimeSlotDto;
 import com.example.oktodemo.model.dto.WorkingDayDto;
 import com.example.oktodemo.model.entity.DoctorEntity;
 import com.example.oktodemo.model.entity.TimeSlotEntity;
+import com.example.oktodemo.model.request.CreateOrUpdateDoctorWorkingDayRequest;
 import com.example.oktodemo.repository.DoctorEntityRepository;
 
 @Service
@@ -32,11 +33,8 @@ public class DoctorService {
         .collect(Collectors.toSet());
   }
 
-//  public Set<WorkingDayDto> updateDoctorWorkingDay(CreateOrUpdateDoctorWorkingDayRequest request) {
-//
-//  }
-  public Set<WorkingDayDto> fetchDoctorWorkingDaysByDoctorFirstNameAndLastName(String firstName, String lastName) {
-    Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findDoctorEntityByFirstNameAndLastName(firstName, lastName);
+  public Set<WorkingDayDto> updateWorkingDayAndTimeSlots(CreateOrUpdateDoctorWorkingDayRequest request) {
+    Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findDoctorEntityByFirstNameAndLastName(request.getFirstName(), request.getLastName());
     return doctorEntity.map(entity -> entity.getWorkingDayEntities()
             .stream().map(workingDayEntity -> WorkingDayDto.builder()
                 .date(workingDayEntity.getDate())
@@ -46,15 +44,12 @@ public class DoctorService {
         .orElseThrow(() -> new RuntimeException("There is no doctor with the provided first name and last name"));
   }
 
-  public Set<WorkingDayDto> fetchDoctorWorkingDaysByDoctorId(Long id) {
-    Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findById(id);
-    return doctorEntity.map(entity -> entity.getWorkingDayEntities()
-            .stream().map(workingDayEntity -> WorkingDayDto.builder()
-                .date(workingDayEntity.getDate())
-                .timeSlots(transformTimeSlotEntitiesToDtos(workingDayEntity.getTimeSlotEntityList()))
-                .build())
-            .collect(Collectors.toSet()))
-        .orElseThrow(() -> new RuntimeException("There is no doctor with the Id that you provided "));
+  public DoctorEntity fetchDoctorByFirstNameAndLastName(String firstName, String lastName) {
+    Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findDoctorEntityByFirstNameAndLastName(firstName, lastName);
+    if (doctorEntity.isEmpty()) {
+      throw new RuntimeException("There is no doctor with the provided name");
+    }
+    return doctorEntity.get();
   }
 
   private Set<TimeSlotDto> transformTimeSlotEntitiesToDtos(Set<TimeSlotEntity> timeSlotEntities) {

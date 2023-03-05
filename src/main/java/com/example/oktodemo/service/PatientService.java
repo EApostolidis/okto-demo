@@ -1,6 +1,7 @@
 package com.example.oktodemo.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,5 +27,13 @@ public class PatientService {
             .lastName(patientEntity.getLastName())
             .build())
         .collect(Collectors.toSet());
+  }
+
+  public PatientEntity fetchPatientByFirstNameAndLastName(String firstName, String lastName) {
+    Optional<PatientEntity> patientEntity = patientEntityRepository.findPatientEntitiesByFirstNameAndLastName(firstName, lastName);
+    if (patientEntity.isEmpty()) {
+      throw new RuntimeException("There is no patient with the provided name");
+    }
+    return patientEntity.get();
   }
 }
