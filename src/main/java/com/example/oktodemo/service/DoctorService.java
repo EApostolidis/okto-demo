@@ -1,14 +1,13 @@
 package com.example.oktodemo.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.oktodemo.model.dto.DoctorDto;
 import com.example.oktodemo.model.dto.TimeSlotDto;
+import com.example.oktodemo.model.dto.WorkingDayDto;
 import com.example.oktodemo.model.entity.DoctorEntity;
 import com.example.oktodemo.model.entity.TimeSlotEntity;
 import com.example.oktodemo.repository.DoctorEntityRepository;
@@ -22,13 +21,13 @@ public class DoctorService {
     this.doctorEntityRepository = doctorEntityRepository;
   }
 
-  public Set<DoctorDto> fetchDoctors() {
-    List<DoctorEntity> doctorEntities = doctorEntityRepository.findAll();
-    return doctorEntities.stream().map(doctorEntity -> DoctorDto.builder()
-            .firstName(doctorEntity.getFirstName())
-            .lastName(doctorEntity.getLastName())
-            .build())
-        .collect(Collectors.toSet());
+  public Set<WorkingDayDto> fetchDoctorWorkingHours(String firstName, String lastName) {
+      return fetchDoctorByFirstNameAndLastName(firstName, lastName).getWorkingDayEntities().stream()
+          .map(entity -> WorkingDayDto.builder()
+              .date(entity.getDate())
+              .timeSlots(transformTimeSlotEntitiesToDtos(entity.getTimeSlotEntityList()))
+              .build())
+          .collect(Collectors.toSet());
   }
 
   public DoctorEntity fetchDoctorByFirstNameAndLastName(String firstName, String lastName) {

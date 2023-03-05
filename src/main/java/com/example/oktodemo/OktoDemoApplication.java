@@ -14,7 +14,7 @@ import com.example.oktodemo.model.dto.PatientDto;
 import com.example.oktodemo.model.request.CreateOrUpdateDoctorWorkingDayRequest;
 import com.example.oktodemo.service.AppointmentService;
 import com.example.oktodemo.service.DoctorService;
-import com.example.oktodemo.service.WorkingDayService;
+import com.example.oktodemo.service.WorkingDayAndTimeSlotService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +29,7 @@ public class OktoDemoApplication implements CommandLineRunner {
   DoctorService doctorService;
 
   @Autowired
-  WorkingDayService workingDayService;
+  WorkingDayAndTimeSlotService workingDayAndTimeSlotService;
 
   public static void main(String[] args) {
     SpringApplication.run(OktoDemoApplication.class, args);
@@ -59,7 +59,7 @@ public class OktoDemoApplication implements CommandLineRunner {
         .to(LocalTime.of(15, 00))
         .build();
 
-    var result = workingDayService.updateWorkingDayAndTimeSlots(request);
+    var result = workingDayAndTimeSlotService.updateWorkingDayAndTimeSlots(request);
 //    var workingdays2 = appointmentService.createAppointment(appointmentDto);
     log.info("{end of process {}", result);
 

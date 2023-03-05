@@ -15,7 +15,7 @@ import com.example.oktodemo.repository.WorkingDayEntityRepository;
 import static com.example.oktodemo.utils.TimeUtility.createLocalDateTime;
 
 @Service
-public class WorkingDayService {
+public class WorkingDayAndTimeSlotService {
 
   private final WorkingDayEntityRepository workingDayEntityRepository;
 
@@ -23,7 +23,7 @@ public class WorkingDayService {
   private final DoctorService doctorService;
 
 
-  public WorkingDayService(WorkingDayEntityRepository workingDayEntityRepository, TimeSlotEntityRepository timeSlotEntityRepository,
+  public WorkingDayAndTimeSlotService(WorkingDayEntityRepository workingDayEntityRepository, TimeSlotEntityRepository timeSlotEntityRepository,
       DoctorService doctorService) {
     this.workingDayEntityRepository = workingDayEntityRepository;
     this.timeSlotEntityRepository = timeSlotEntityRepository;
@@ -42,7 +42,6 @@ public class WorkingDayService {
         .date(entity.getDate())
         .build();
   }
-
 
   private WorkingDayEntity createNewWorkingEntity(CreateOrUpdateDoctorWorkingDayRequest request, DoctorEntity doctorEntity) {
     WorkingDayEntity workingDayEntity = new WorkingDayEntity();
