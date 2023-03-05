@@ -8,9 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.oktodemo.model.dto.AppointmentDto;
-import com.example.oktodemo.model.dto.DoctorDto;
-import com.example.oktodemo.model.dto.PatientDto;
 import com.example.oktodemo.model.request.CreateOrUpdateDoctorWorkingDayRequest;
 import com.example.oktodemo.service.AppointmentService;
 import com.example.oktodemo.service.DoctorService;
@@ -41,15 +38,15 @@ public class OktoDemoApplication implements CommandLineRunner {
     log.info("run process");
 
 
-
-    AppointmentDto appointmentDto = AppointmentDto.builder()
-        .date(LocalDate.of(2023, 03,04))
-        .from(LocalTime.of(03,00))
-        .to(LocalTime.of(04, 00))
-        .doctor(DoctorDto.builder().firstName("Vaggelis").lastName("Apostolidis").build())
-        .patient(PatientDto.builder().firstName("Rigas").lastName("Paparigas").build())
-        .build();
-    var workingdays = appointmentService.createAppointment(appointmentDto);
+//
+//    AppointmentDto appointmentDto = AppointmentDto.builder()
+//        .date(LocalDate.of(2023, 03,04))
+//        .from(LocalTime.of(03,00))
+//        .to(LocalTime.of(04, 00))
+//        .doctor(DoctorDto.builder().firstName("Vaggelis").lastName("Apostolidis").build())
+//        .patient(PatientDto.builder().firstName("Rigas").lastName("Paparigas").build())
+//        .build();
+//    var workingdays = appointmentService.createAppointment(appointmentDto);
 
     var request = CreateOrUpdateDoctorWorkingDayRequest.builder()
         .firstName("Vaggelis")

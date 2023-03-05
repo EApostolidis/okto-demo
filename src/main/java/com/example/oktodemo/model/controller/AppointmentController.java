@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.oktodemo.model.dto.AppointmentDto;
+import com.example.oktodemo.model.request.CreateAppointmentRequest;
 import com.example.oktodemo.service.AppointmentService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -25,8 +26,8 @@ public class AppointmentController implements AppointmentApi {
 
   @Override
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<AppointmentDto> createAppointment(@RequestBody AppointmentDto appointmentDto) {
-    AppointmentDto response = appointmentService.createAppointment(appointmentDto);
+  public ResponseEntity<AppointmentDto> createAppointment(@RequestBody CreateAppointmentRequest request) {
+    AppointmentDto response = appointmentService.createAppointment(request);
     return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
   }
 }
