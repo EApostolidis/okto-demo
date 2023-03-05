@@ -1,9 +1,11 @@
 package com.example.oktodemo.service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.oktodemo.model.dto.TimeSlotDto;
 import com.example.oktodemo.model.dto.WorkingDayDto;
 import com.example.oktodemo.model.entity.DoctorEntity;
 import com.example.oktodemo.model.entity.TimeSlotEntity;
@@ -31,15 +33,21 @@ public class WorkingDayAndTimeSlotService {
   }
 
   public WorkingDayDto updateWorkingDayAndTimeSlots(CreateOrUpdateDoctorWorkingDayRequest request) {
-    DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(request.getFirstName(), request.getLastName());
+    DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(request.getDoctorFirstName(), request.getDoctorLastName());
     Optional<WorkingDayEntity> workingDayEntity = doctorEntity.getWorkingDayEntities().stream()
         .filter(entity -> entity.getDate().equals(request.getDate()))
         .findFirst();
 
-    WorkingDayEntity entity = workingDayEntity.isPresent() ? createNewTimeSlot(request, workingDayEntity.get()) : createNewWorkingEntity(request, doctorEntity);
+    WorkingDayEntity entity = workingDayEntity.map(dayEntity -> createNewTimeSlot(request, dayEntity))
+        .orElseGet(() -> createNewWorkingEntity(request, doctorEntity));
 
     return WorkingDayDto.builder()
         .date(entity.getDate())
+        .timeSlots(entity.getTimeSlotEntityList().stream().map(timeSlot -> TimeSlotDto.builder()
+                .to(timeSlot.getTo().toLocalTime())
+                .from(timeSlot.getFrom().toLocalTime())
+            .build())
+            .collect(Collectors.toSet()))
         .build();
   }
 
@@ -60,5 +68,4 @@ public class WorkingDayAndTimeSlotService {
     workingDayEntity.getTimeSlotEntityList().add(timeSlotEntity);
     return workingDayEntity;
   }
-
 }

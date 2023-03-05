@@ -49,8 +49,8 @@ public class OktoDemoApplication implements CommandLineRunner {
 //    var workingdays = appointmentService.createAppointment(appointmentDto);
 
     var request = CreateOrUpdateDoctorWorkingDayRequest.builder()
-        .firstName("Vaggelis")
-        .lastName("Apostolidis")
+        .doctorFirstName("Vaggelis")
+        .doctorLastName("Apostolidis")
         .date(LocalDate.of(2023, 03,9))
         .from(LocalTime.of(14,00))
         .to(LocalTime.of(15, 00))

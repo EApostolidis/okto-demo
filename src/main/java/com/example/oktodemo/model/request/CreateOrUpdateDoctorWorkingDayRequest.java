@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateOrUpdateDoctorWorkingDayRequest {
 
-  private String firstName;
+  private String doctorFirstName;
 
-  private String lastName;
+  private String doctorLastName;
 
   private LocalDate date;
 

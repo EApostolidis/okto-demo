@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "1c6b651e-f3e2-4d1b-bbb3-5dbcc789c6df",
+		"name": "okto-demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3956460"
+	},
+	"item": [
+		{
+			"name": "create appointment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"doctorFirstName\": \"Vaggelis\",\r\n    \"doctorLastName\": \"Apostolidis\",\r\n    \"patientFirstName\": \"Rigas\",\r\n    \"patientLastName\":\"Paparigas\",\r\n    \"date\": \"2023-03-09\",\r\n    \"from\": \"15:01\",\r\n    \"to\": \"16:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/appointments",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "retrieve doctors working days with timeslots",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/doctors?firstName=Vaggelis&lastName=Apostolidis",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"doctors"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Vaggelis"
+						},
+						{
+							"key": "lastName",
+							"value": "Apostolidis"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/working-days",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"doctorFirstName\": \"Vaggelis\",\r\n    \"doctorLastName\": \"Apostolidis\",\r\n    \"date\": \"2023-03-11\",\r\n    \"from\": \"00:00\",\r\n    \"to\": \"23:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/working-days",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"working-days"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
