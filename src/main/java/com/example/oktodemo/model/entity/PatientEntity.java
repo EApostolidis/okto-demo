@@ -28,7 +28,7 @@ public class PatientEntity {
 
   private String lastName;
 
-  @OneToMany(mappedBy = "patientEntity", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "patientEntity", fetch = FetchType.LAZY)
   private Set<AppointmentEntity> appointmentEntities = new HashSet<>();
 
 }
