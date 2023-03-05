@@ -1,9 +1,6 @@
 package com.example.oktodemo.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -18,14 +15,13 @@ import com.example.oktodemo.model.request.CreateAppointmentRequest;
 import com.example.oktodemo.repository.AppointmentEntityRepository;
 
 import static com.example.oktodemo.utils.TimeUtility.checkIfTimeIsInsidePeriod;
+import static com.example.oktodemo.utils.TimeUtility.checkTimeValidity;
 import static com.example.oktodemo.utils.TimeUtility.createLocalDateTime;
 
 @Service
 public class AppointmentService {
-
   private final AppointmentEntityRepository appointmentEntityRepository;
   private final DoctorService doctorService;
-
   private final PatientService patientService;
 
   public AppointmentService(AppointmentEntityRepository appointmentEntityRepository, DoctorService doctorService, PatientService patientService) {
@@ -35,10 +31,9 @@ public class AppointmentService {
   }
 
   public AppointmentDto createAppointment(CreateAppointmentRequest request) {
+    checkTimeValidity(request.getFrom(), request.getTo());
     DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(request.getDoctorFirstName(), request.getDoctorLastName());
-
     PatientEntity patientEntity = patientService.fetchPatientByFirstNameAndLastName(request.getPatientFirstName(), request.getPatientLastName());
-
     Optional<AppointmentEntity> bookedAppointment = doctorEntity.getAppointmentEntities().stream()
         .filter(appointment -> appointment.getDate().equals(request.getDate()) &&
             (checkIfTimeIsInsidePeriod(createLocalDateTime(request.getDate(), request.getFrom()), appointment.getFrom(),
@@ -50,7 +45,6 @@ public class AppointmentService {
     if (bookedAppointment.isPresent()) {
       throw new RuntimeException("There is already booked appointment at that day and hour");
     }
-
     Optional<Optional<TimeSlotEntity>> timeSlotEntity = Optional.of(doctorEntity.getWorkingDayEntities().stream()
         .filter(workingDayEntity -> workingDayEntity.getDate().equals(request.getDate()))
         .findFirst()
@@ -64,9 +58,7 @@ public class AppointmentService {
     if (timeSlotEntity.isEmpty()) {
       throw new RuntimeException("There is no available time for appointment");
     }
-
     AppointmentEntity appointmentEntity = createAppointmentEntity(request, doctorEntity, patientEntity);
-
     appointmentEntityRepository.save(appointmentEntity);
     return AppointmentDto.builder()
         .doctor(DoctorDto.builder().firstName(appointmentEntity.getDoctorEntity().getFirstName()).lastName(appointmentEntity.getDoctorEntity().getLastName()).build())
@@ -85,32 +77,5 @@ public class AppointmentService {
     appointmentEntity.setFrom(createLocalDateTime(request.getDate(), request.getFrom()));
     appointmentEntity.setTo(createLocalDateTime(request.getDate(), request.getTo()));
     return appointmentEntity;
-  }
-
-  public Set<AppointmentDto> fetchAppointments() {
-    List<AppointmentEntity> appointmentEntities = appointmentEntityRepository.findAll();
-    return appointmentEntities.stream().map(appointmentEntity ->
-            AppointmentDto.builder()
-                .date(appointmentEntity.getDate())
-                .from(appointmentEntity.getFrom().toLocalTime())
-                .to(appointmentEntity.getTo().toLocalTime())
-                .doctor(transformDoctorEntityToDto(appointmentEntity.getDoctorEntity()))
-                .patient(transformPatientEntityToDto(appointmentEntity.getPatientEntity()))
-                .build())
-        .collect(Collectors.toSet());
-  }
-
-  private DoctorDto transformDoctorEntityToDto(DoctorEntity doctorEntity) {
-    return DoctorDto.builder()
-        .firstName(doctorEntity.getFirstName())
-        .lastName(doctorEntity.getLastName())
-        .build();
-  }
-
-  private PatientDto transformPatientEntityToDto(PatientEntity patientEntity) {
-    return PatientDto.builder()
-        .firstName(patientEntity.getFirstName())
-        .lastName(patientEntity.getLastName())
-        .build();
   }
 }

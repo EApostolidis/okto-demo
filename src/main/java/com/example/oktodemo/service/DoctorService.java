@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.oktodemo.model.dto.TimeSlotDto;
 import com.example.oktodemo.model.dto.WorkingDayDto;
 import com.example.oktodemo.model.entity.DoctorEntity;
-import com.example.oktodemo.model.entity.TimeSlotEntity;
 import com.example.oktodemo.repository.DoctorEntityRepository;
 
 @Service
@@ -25,7 +24,11 @@ public class DoctorService {
       return fetchDoctorByFirstNameAndLastName(firstName, lastName).getWorkingDayEntities().stream()
           .map(entity -> WorkingDayDto.builder()
               .date(entity.getDate())
-              .timeSlots(transformTimeSlotEntitiesToDtos(entity.getTimeSlotEntityList()))
+              .timeSlots(entity.getTimeSlotEntityList().stream().map(timeSlotEntity -> TimeSlotDto.builder()
+                      .from(timeSlotEntity.getFrom().toLocalTime())
+                      .to(timeSlotEntity.getTo().toLocalTime())
+                      .build())
+                  .collect(Collectors.toSet()))
               .build())
           .collect(Collectors.toSet());
   }
@@ -36,13 +39,5 @@ public class DoctorService {
       throw new RuntimeException("There is no doctor with the provided name");
     }
     return doctorEntity.get();
-  }
-
-  private Set<TimeSlotDto> transformTimeSlotEntitiesToDtos(Set<TimeSlotEntity> timeSlotEntities) {
-    return timeSlotEntities.stream().map(timeSlotEntity -> TimeSlotDto.builder()
-            .from(timeSlotEntity.getFrom().toLocalTime())
-            .to(timeSlotEntity.getTo().toLocalTime())
-            .build())
-        .collect(Collectors.toSet());
   }
 }

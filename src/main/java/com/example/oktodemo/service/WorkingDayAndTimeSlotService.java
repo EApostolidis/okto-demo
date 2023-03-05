@@ -14,6 +14,7 @@ import com.example.oktodemo.model.request.CreateOrUpdateDoctorWorkingDayRequest;
 import com.example.oktodemo.repository.TimeSlotEntityRepository;
 import com.example.oktodemo.repository.WorkingDayEntityRepository;
 
+import static com.example.oktodemo.utils.TimeUtility.checkTimeValidity;
 import static com.example.oktodemo.utils.TimeUtility.createLocalDateTime;
 
 @Service
@@ -33,6 +34,7 @@ public class WorkingDayAndTimeSlotService {
   }
 
   public WorkingDayDto updateWorkingDayAndTimeSlots(CreateOrUpdateDoctorWorkingDayRequest request) {
+    checkTimeValidity(request.getFrom(), request.getTo());
     DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(request.getDoctorFirstName(), request.getDoctorLastName());
     Optional<WorkingDayEntity> workingDayEntity = doctorEntity.getWorkingDayEntities().stream()
         .filter(entity -> entity.getDate().equals(request.getDate()))

@@ -17,4 +17,9 @@ public class TimeUtility {
     return (check.equals(from) || check.isAfter(from)) && (check.isBefore(to) || check.equals(to));
   }
 
+  public static void checkTimeValidity(LocalTime from, LocalTime to) {
+    if (from.equals(to) || from.isAfter(to)) {
+      throw new RuntimeException("The from value should be before to value");
+    }
+  }
 }
