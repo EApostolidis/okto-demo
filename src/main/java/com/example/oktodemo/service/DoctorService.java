@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.oktodemo.model.dto.DoctorDto;
 import com.example.oktodemo.model.dto.TimeSlotDto;
-import com.example.oktodemo.model.dto.WorkingDayDto;
 import com.example.oktodemo.model.entity.DoctorEntity;
 import com.example.oktodemo.model.entity.TimeSlotEntity;
-import com.example.oktodemo.model.request.CreateOrUpdateDoctorWorkingDayRequest;
 import com.example.oktodemo.repository.DoctorEntityRepository;
 
 @Service
@@ -31,17 +29,6 @@ public class DoctorService {
             .lastName(doctorEntity.getLastName())
             .build())
         .collect(Collectors.toSet());
-  }
-
-  public Set<WorkingDayDto> updateWorkingDayAndTimeSlots(CreateOrUpdateDoctorWorkingDayRequest request) {
-    Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findDoctorEntityByFirstNameAndLastName(request.getFirstName(), request.getLastName());
-    return doctorEntity.map(entity -> entity.getWorkingDayEntities()
-            .stream().map(workingDayEntity -> WorkingDayDto.builder()
-                .date(workingDayEntity.getDate())
-                .timeSlots(transformTimeSlotEntitiesToDtos(workingDayEntity.getTimeSlotEntityList()))
-                .build())
-            .collect(Collectors.toSet()))
-        .orElseThrow(() -> new RuntimeException("There is no doctor with the provided first name and last name"));
   }
 
   public DoctorEntity fetchDoctorByFirstNameAndLastName(String firstName, String lastName) {

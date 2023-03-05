@@ -1,8 +1,5 @@
 package com.example.oktodemo.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +15,9 @@ import com.example.oktodemo.model.entity.DoctorEntity;
 import com.example.oktodemo.model.entity.PatientEntity;
 import com.example.oktodemo.model.entity.TimeSlotEntity;
 import com.example.oktodemo.repository.AppointmentEntityRepository;
+
+import static com.example.oktodemo.utils.TimeUtility.checkIfTimeIsInsidePeriod;
+import static com.example.oktodemo.utils.TimeUtility.createLocalDateTime;
 
 @Service
 public class AppointmentService {
@@ -107,13 +107,5 @@ public class AppointmentService {
         .firstName(patientEntity.getFirstName())
         .lastName(patientEntity.getLastName())
         .build();
-  }
-
-  private LocalDateTime createLocalDateTime(LocalDate date, LocalTime time) {
-    return LocalDateTime.of(date, time);
-  }
-
-  private boolean checkIfTimeIsInsidePeriod(LocalDateTime check, LocalDateTime from, LocalDateTime to) {
-    return (check.equals(from) || check.isAfter(from)) && (check.isBefore(to) || check.equals(to));
   }
 }
