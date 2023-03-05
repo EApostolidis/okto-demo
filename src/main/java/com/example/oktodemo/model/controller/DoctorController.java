@@ -17,7 +17,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "/doctors", produces = APPLICATION_JSON_VALUE)
 public class DoctorController implements DoctorApi {
-
   private final DoctorService doctorService;
 
   public DoctorController(DoctorService doctorService) {

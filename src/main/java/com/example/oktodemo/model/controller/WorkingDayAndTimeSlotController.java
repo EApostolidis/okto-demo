@@ -1,5 +1,7 @@
 package com.example.oktodemo.model.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class WorkingDayAndTimeSlotController implements WorkingDayAndTimeSlotApi
 
   @Override
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<WorkingDayDto> updateWorkingDayAndTimeSlots(@RequestBody CreateOrUpdateDoctorWorkingDayRequest request) {
+  public ResponseEntity<WorkingDayDto> updateWorkingDayAndTimeSlots(@Valid @RequestBody CreateOrUpdateDoctorWorkingDayRequest request) {
     WorkingDayDto response = workingDayAndTimeSlotService.updateWorkingDayAndTimeSlots(request);
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
