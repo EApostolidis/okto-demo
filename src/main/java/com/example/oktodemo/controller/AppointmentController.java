@@ -1,4 +1,4 @@
-package com.example.oktodemo.model.controller;
+package com.example.oktodemo.controller;
 
 import javax.validation.Valid;
 
