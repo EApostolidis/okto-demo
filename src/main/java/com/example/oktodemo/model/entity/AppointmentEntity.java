@@ -29,10 +29,10 @@ public class AppointmentEntity {
   private LocalDateTime from;
 
   private LocalDateTime to;
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private DoctorEntity doctorEntity;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private PatientEntity patientEntity;
 
 }

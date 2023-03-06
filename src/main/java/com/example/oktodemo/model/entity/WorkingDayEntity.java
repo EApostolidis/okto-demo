@@ -28,9 +28,9 @@ public class WorkingDayEntity {
 
   private LocalDate date;
 
-  @OneToMany(mappedBy = "workingDayEntity", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "workingDayEntity", fetch = FetchType.EAGER)
   private Set<TimeSlotEntity> timeSlotEntityList = new HashSet<>();
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private DoctorEntity doctorEntity;
 }

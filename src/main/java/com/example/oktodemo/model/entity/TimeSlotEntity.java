@@ -26,6 +26,6 @@ public class TimeSlotEntity {
 
   private LocalDateTime to;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private WorkingDayEntity workingDayEntity;
 }
