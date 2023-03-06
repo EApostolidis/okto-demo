@@ -32,6 +32,12 @@ public class WorkingDayAndTimeSlotService {
     this.doctorService = doctorService;
   }
 
+  /**
+   * Updates the timeslots list by adding new one if the day exists,
+   * or creates new day with new timeslots list
+   * @param request {@link CreateOrUpdateDoctorWorkingDayRequest}
+   * @return {@link WorkingDayDto}
+   */
   public WorkingDayDto updateWorkingDayAndTimeSlots(CreateOrUpdateDoctorWorkingDayRequest request) {
     checkTimeValidity(request.getFrom(), request.getTo());
     DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(request.getDoctorFirstName(), request.getDoctorLastName());

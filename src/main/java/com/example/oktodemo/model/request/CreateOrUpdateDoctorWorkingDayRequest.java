@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The request for the creation of new timeslots or working days
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

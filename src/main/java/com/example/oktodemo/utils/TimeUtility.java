@@ -6,6 +6,9 @@ import java.time.LocalTime;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility clas for checking dates and making validations
+ */
 @UtilityClass
 public class TimeUtility {
 

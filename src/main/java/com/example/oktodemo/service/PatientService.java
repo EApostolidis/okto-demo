@@ -16,6 +16,12 @@ public class PatientService {
     this.patientEntityRepository = patientEntityRepository;
   }
 
+  /**
+   * Returns patient if there is in the database
+   * @param firstName patient's first name
+   * @param lastName patient's last name
+   * @return {@link PatientEntity}
+   */
   public PatientEntity fetchPatientByFirstNameAndLastName(String firstName, String lastName) {
     Optional<PatientEntity> patientEntity = patientEntityRepository.findPatientEntitiesByFirstNameAndLastName(firstName, lastName);
     if (patientEntity.isEmpty()) {

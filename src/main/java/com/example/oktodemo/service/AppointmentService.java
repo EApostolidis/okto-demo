@@ -30,6 +30,12 @@ public class AppointmentService {
     this.patientService = patientService;
   }
 
+  /**
+   * Create the appointment between the Doctor and Patient after validating
+   * if there are available working hours and not booked appointments
+   * @param request {@link  CreateAppointmentRequest}
+   * @return {@link AppointmentDto}
+   */
   public AppointmentDto createAppointment(CreateAppointmentRequest request) {
     checkTimeValidity(request.getFrom(), request.getTo());
     DoctorEntity doctorEntity = doctorService.fetchDoctorByFirstNameAndLastName(request.getDoctorFirstName(), request.getDoctorLastName());

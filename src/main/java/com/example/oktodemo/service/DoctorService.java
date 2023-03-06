@@ -20,6 +20,12 @@ public class DoctorService {
     this.doctorEntityRepository = doctorEntityRepository;
   }
 
+  /**
+   * Fetch doctor's working hours
+   * @param firstName doctor's first name
+   * @param lastName doctor's last name
+   * @return {@link Set<WorkingDayDto>}
+   */
   public Set<WorkingDayDto> fetchDoctorWorkingHours(String firstName, String lastName) {
       return fetchDoctorByFirstNameAndLastName(firstName, lastName).getWorkingDayEntities().stream()
           .map(entity -> WorkingDayDto.builder()
@@ -33,6 +39,12 @@ public class DoctorService {
           .collect(Collectors.toSet());
   }
 
+  /**
+   * Returns doctor if there is in the database
+   * @param firstName doctor's first name
+   * @param lastName doctor's last name
+   * @return {@link DoctorEntity}
+   */
   public DoctorEntity fetchDoctorByFirstNameAndLastName(String firstName, String lastName) {
     Optional<DoctorEntity> doctorEntity = doctorEntityRepository.findDoctorEntityByFirstNameAndLastName(firstName, lastName);
     if (doctorEntity.isEmpty()) {
