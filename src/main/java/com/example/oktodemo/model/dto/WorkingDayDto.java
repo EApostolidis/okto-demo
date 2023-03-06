@@ -15,5 +15,7 @@ import lombok.NoArgsConstructor;
 public class WorkingDayDto {
 
   private LocalDate date;
+
   private Set<TimeSlotDto> timeSlots;
+
 }

@@ -19,6 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "/appointments", produces = APPLICATION_JSON_VALUE)
 public class AppointmentController implements AppointmentApi {
+
   private final AppointmentService appointmentService;
 
   public AppointmentController(AppointmentService appointmentService) {

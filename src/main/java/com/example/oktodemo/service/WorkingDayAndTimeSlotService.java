@@ -21,7 +21,6 @@ import static com.example.oktodemo.utils.TimeUtility.createLocalDateTime;
 public class WorkingDayAndTimeSlotService {
 
   private final WorkingDayEntityRepository workingDayEntityRepository;
-
   private final TimeSlotEntityRepository timeSlotEntityRepository;
   private final DoctorService doctorService;
 
@@ -48,7 +47,7 @@ public class WorkingDayAndTimeSlotService {
         .timeSlots(entity.getTimeSlotEntityList().stream().map(timeSlot -> TimeSlotDto.builder()
                 .to(timeSlot.getTo().toLocalTime())
                 .from(timeSlot.getFrom().toLocalTime())
-            .build())
+                .build())
             .collect(Collectors.toSet()))
         .build();
   }
